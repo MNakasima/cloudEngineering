@@ -13,25 +13,7 @@ provider:
             
 
 functions:
-  sqsHandler:
-    handler: handler.handler
-    events:
-      - sqs:
-          arn:
-            arn:aws:sqs:${aws:region}:${aws:accountId}:espera-entrega
-          batchSize: 1
-          enabled: true
           
-  source:
-    handler: handler.handler
-    events:
-      - eventBridge:
-          eventBus:
-            - arn:aws:events:${aws:region}:${aws:accountId}:event-bus/pizzaria
-          pattern:
-            source:
-              - com.pizza.status
-              
   detail:
     handler: handler.handler
     events:

@@ -13,6 +13,14 @@ provider:
             
 
 functions:
+  sqsHandler:
+    handler: handler.handler
+    events:
+      - sqs:
+          arn:
+            arn:aws:sqs:${aws:region}:${aws:accountId}:espera-entrega
+          batchSize: 1
+          enabled: true
           
   detail:
     handler: handler.handler

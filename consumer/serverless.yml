@@ -1,4 +1,4 @@
-service: consumer
+service: sqs-status-done
 
 frameworkVersion: '3'
 
@@ -10,14 +10,29 @@ provider:
   lambdaHashingVersion: "20201221"
   iam:
     role: !Sub arn:aws:iam::${AWS::AccountId}:role/LabRole
-  environment:
-    sqs_url: !Sub https://sqs.us-east-1.amazonaws.com/${AWS::AccountId}/espera-entrega
             
 
 functions:
   sqsHandler:
     handler: handler.handler
     events:
-      - schedule:
-          rate: rate(5 minutes)
+      - sqs:
+          arn:
+            arn:aws:sqs:${aws:region}:${aws:accountId}:espera-entrega
+          batchSize: 1
           enabled: true
+          
+  detail:
+    handler: handler.handler
+    events:
+      - eventBridge:
+          eventBus:
+            - arn:aws:events:${aws:region}:${aws:accountId}:event-bus/pizzaria
+          pattern:
+            source:
+              - com.pizza.status
+            detail-type:
+              - Alteracao Pizza
+            detail:
+              status:
+                - pronto

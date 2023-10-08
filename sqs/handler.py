@@ -8,7 +8,7 @@ def handler(event, context):
     data = json.dumps(event)
     python_data = json.loads(data)
     
-    message = python_data['detail']['cliente'] + ' pedido: ' + str(python_data['detail']['pedido'])
+    message = python_data['detail']['cliente'] + ' pedido: ' + str(python_data['detail']['pedido']) + python_data['detail']['status']
     
     sqs.send(message)
     
